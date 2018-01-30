@@ -1,13 +1,10 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Replay
 {
-
     /// <summary>
     /// Unity物品管理
     /// </summary>
@@ -16,11 +13,24 @@ namespace Replay
         public static List<GameObject> goList = new List<GameObject>();
         public static List<Component> coList = new List<Component>();
 
+        /// <summary>
+        /// 添加所有物体
+        /// </summary>
         public static void RefreshGos()
         {
             goList.Clear();
             Array.ForEach(SceneManager.GetActiveScene().GetRootGameObjects(), p => goList.AddRange(Array.ConvertAll(p.GetComponentsInChildren<Transform>(true), q => q.gameObject)));
             goList.Sort((p, q) => q.GetInstanceID().CompareTo(p.GetInstanceID()));
+        }
+
+        /// <summary>
+        /// 添加所有物体上的脚本
+        /// </summary>
+        public static void RefreshCos()
+        {
+            coList.Clear();
+            goList.ForEach(p => coList.AddRange(p.GetComponents<Component>()));
+            coList.Sort((p, q) => q.GetInstanceID().CompareTo(p.GetInstanceID()));
         }
 
         public static int GetGameObjectID(GameObject gameObject)
@@ -36,13 +46,6 @@ namespace Replay
                 return null;
             }
             return goList[id];
-        }
-
-        public static void RefreshCos()
-        {
-            coList.Clear();
-            goList.ForEach(p => coList.AddRange(p.GetComponents<Component>()));
-            coList.Sort((p, q) => q.GetInstanceID().CompareTo(p.GetInstanceID()));
         }
 
         public static void Refresh()

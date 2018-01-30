@@ -1,22 +1,32 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 
-namespace Replay
+namespace MyUnitySDK.Crypto
 {
     /// <summary>
-    /// 加密处理接口
+    /// 加密压缩处理接口
     /// </summary>
     public abstract class AbsCrypto
     {
+        /// <summary>
+        /// 加密,压缩
+        /// </summary>
+        /// <param name="content">需要加密内容</param>
+        /// <returns></returns>
         public abstract byte[] Encrypt(byte[] content);
+
+        /// <summary>
+        /// 解密,解压缩
+        /// </summary>
+        /// <param name="content">需要解密内容</param>
+        /// <returns></returns>
         public abstract byte[] Decrypt(byte[] content);
     }
 
     /// <summary>
-    /// 加密密处理工具
+    /// 加解密(压缩解压缩)处理工具
     /// </summary>
-    public class RCrypto
+    public class Crypto
     {
         public static AbsCrypto cryptoTool;
 
@@ -30,11 +40,9 @@ namespace Replay
             return cryptoTool.Decrypt(content);
         }
     }
-
-
 }
 
-namespace Replay
+namespace MyUnitySDK.Crypto
 {
     /// <summary>
     /// 简单加解密工具
@@ -61,7 +69,7 @@ namespace Replay
     }
 
     /// <summary>
-    /// GZip加密工具
+    /// GZip压缩工具(不能用于压缩大于 4 GB )
     /// </summary>
     public class GZipCryptoTool : AbsCrypto
     {
@@ -78,7 +86,6 @@ namespace Replay
                         return outStream.ToArray();
                     }
                 }
-
             }
         }
 
@@ -106,6 +113,9 @@ namespace Replay
         }
     }
 
+    /// <summary>
+    /// 不处理
+    /// </summary>
     public class NoCryptoTool : AbsCrypto
     {
         public override byte[] Decrypt(byte[] content)
@@ -118,5 +128,4 @@ namespace Replay
             return content;
         }
     }
-
 }

@@ -1,12 +1,9 @@
-﻿
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace Replay
+namespace MyUnitySDK.SerializeTool
 {
     /// <summary>
     /// 序列化工具接口
@@ -14,32 +11,36 @@ namespace Replay
     public abstract class AbsSerialize
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
         public abstract bool IsTypeSupport(Type type);
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public abstract string Serialize(object value);
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public abstract object Deserialize(string value);
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="value"></param>
         /// <param name="type"></param>
         /// <returns></returns>
         public abstract object Deserialize(string value, Type type);
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
@@ -48,9 +49,9 @@ namespace Replay
     }
 
     /// <summary>
-    /// 
+    /// 序列化工具
     /// </summary>
-    public class RSerialize
+    public class SerializeTool
     {
         /// <summary>
         /// 当前序列化工具
@@ -58,13 +59,12 @@ namespace Replay
         public static AbsSerialize serializeTool;
 
         /// <summary>
-        /// 序列化
+        /// 开始序列化
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">序列化对象</param>
         /// <returns></returns>
         public static string Serialize(object value)
         {
-            
             if (!serializeTool.IsTypeSupport(value.GetType()))
             {
                 Debug.LogWarning("当前序列化工具不支持此类型的序列化");
@@ -76,7 +76,7 @@ namespace Replay
         /// <summary>
         /// 反序列化
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">反序列化对象</param>
         /// <returns></returns>
         public static object Deserialize(string value)
         {
@@ -89,7 +89,7 @@ namespace Replay
         }
 
         /// <summary>
-        /// 反序列化
+        /// 泛型 反序列化
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
@@ -120,22 +120,18 @@ namespace Replay
             }
             return serializeTool.Deserialize(value, type);
         }
-
-
     }
-
 }
 
-namespace Replay
+namespace MyUnitySDK.SerializeTool
 {
-
     /// <summary>
     /// Unity自带序列化工具
     /// </summary>
     public class JsonUtilitySerializeTool : AbsSerialize
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name = "value" ></ param >
         /// < returns ></ returns >
@@ -143,8 +139,9 @@ namespace Replay
         {
             return JsonUtility.FromJson<object>(value);
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name = "value" ></ param >
         /// < param name="type"></param>
@@ -153,8 +150,9 @@ namespace Replay
         {
             return JsonUtility.FromJson(value, type);
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name = "T" ></ typeparam >
         /// < param name="value"></param>
@@ -163,8 +161,9 @@ namespace Replay
         {
             return JsonUtility.FromJson<T>(value);
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name = "type" ></ param >
         /// < returns ></ returns >
@@ -172,8 +171,9 @@ namespace Replay
         {
             return type.IsSerializable;
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name = "value" ></ param >
         /// < returns ></ returns >
@@ -186,10 +186,10 @@ namespace Replay
     /// <summary>
     /// JsonDotNet插件序列化工具
     /// </summary>
-    public class NewtonsoftSerializeTool : AbsSerialize
+    public class JsonDotNetSerializeTool : AbsSerialize
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -197,8 +197,9 @@ namespace Replay
         {
             return JsonConvert.DeserializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="value"></param>
         /// <param name="type"></param>
@@ -207,8 +208,9 @@ namespace Replay
         {
             return JsonConvert.DeserializeObject(value, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
@@ -217,8 +219,9 @@ namespace Replay
         {
             return JsonConvert.DeserializeObject<T>(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -228,7 +231,7 @@ namespace Replay
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -241,169 +244,180 @@ namespace Replay
     /// <summary>
     /// 通用序列化工具
     /// </summary>
-    public class CommonSerializeTool : AbsSerialize
-    {
-        public List<Component> components = new List<Component>();
-        public List<GameObject> gos = new List<GameObject>();
-        NewtonsoftSerializeTool jsonTool = new NewtonsoftSerializeTool();
 
-        public CommonSerializeTool()
-        {
-            Init();
-        }
+    //public class CommonSerializeTool : AbsSerialize
+    //{
+    //    public List<Component> components = new List<Component>();
+    //    public List<GameObject> gos = new List<GameObject>();
+    //    private JsonDotNetSerializeTool jsonTool = new JsonDotNetSerializeTool();
 
-        public void Init()
-        {
-            RefreshCom();
-            RefreshGo();
-        }
+    //    public CommonSerializeTool()
+    //    {
+    //        Init();
+    //    }
 
-        private void RefreshGo()
-        {
-            gos.Clear();
-            gos.AddRange(Array.ConvertAll(UnityEngine.Object.FindObjectsOfType<Transform>(), p => p.gameObject));
-        }
+    //    public void Init()
+    //    {
+    //        RefreshCom();
+    //        RefreshGo();
+    //    }
 
-        private void RefreshCom()
-        {
-            components.Clear();
-            components.AddRange(UnityEngine.Object.FindObjectsOfType<Component>());
-            components.Sort((p, q) => q.GetInstanceID().CompareTo(p.GetInstanceID()));
-        }
+    //    /// <summary>
+    //    /// 添加GameObject
+    //    /// </summary>
+    //    private void RefreshGo()
+    //    {
+    //        gos.Clear();
+    //        //把Transform 转换成 GameObject
+    //        gos.AddRange(Array.ConvertAll(UnityEngine.Object.FindObjectsOfType<Transform>(), p => p.gameObject));
+    //    }
 
-        public override object Deserialize(string value)
-        {
-            object r = jsonTool.Deserialize(value);
+    //    /// <summary>
+    //    /// 添加组件
+    //    /// </summary>
+    //    private void RefreshCom()
+    //    {
+    //        components.Clear();
+    //        components.AddRange(UnityEngine.Object.FindObjectsOfType<Component>());
+    //        components.Sort((p, q) => q.GetInstanceID().CompareTo(p.GetInstanceID()));
+    //    }
 
-            //if (r is ComponentID)
-            //{
-            //    r = components[(ComponentID)r];
-            //    Debug.Log(r);
-            //}
-            //if (r is GameObjectID)
-            //{
-            //    r = gos[(GameObjectID)r];
-            //}
-            return r;
-        }
+    //    public override object Deserialize(string value)
+    //    {
+    //        object r = jsonTool.Deserialize(value);
 
-        public override object Deserialize(string value, Type type)
-        {
-            Type realType = type;
-            if (type == typeof(Component) || type == typeof(GameObject))
-            {
-                realType = typeof(int);
-            }
+    //        //if (r is ComponentID)
+    //        //{
+    //        //    r = components[(ComponentID)r];
+    //        //    Debug.Log(r);
+    //        //}
+    //        //if (r is GameObjectID)
+    //        //{
+    //        //    r = gos[(GameObjectID)r];
+    //        //}
+    //        return r;
+    //    }
 
-            object result = jsonTool.Deserialize(value, realType);
-            if (type == typeof(Component))
-            {
-                result = components[(int)result];
-            }
-            else if (type == typeof(GameObject))
-            {
-                result = gos[(int)result];
-            }
-            return result;
-        }
+    //    public override object Deserialize(string value, Type type)
+    //    {
+    //        Type realType = type;
+    //        if (type == typeof(Component) || type == typeof(GameObject))
+    //        {
+    //            realType = typeof(int);
+    //        }
 
-        public override T Deserialize<T>(string value)
-        {
-            Type realType = typeof(T);
-            if (realType == typeof(Component))
-            {
-                return (T)(object)components[jsonTool.Deserialize<int>(value)];
-            }
-            else if (realType == typeof(GameObject))
-            {
-                return (T)(object)gos[jsonTool.Deserialize<int>(value)];
-            }
+    //        object result = jsonTool.Deserialize(value, realType);
+    //        if (type == typeof(Component))
+    //        {
+    //            result = components[(int)result];
+    //        }
+    //        else if (type == typeof(GameObject))
+    //        {
+    //            result = gos[(int)result];
+    //        }
+    //        return result;
+    //    }
 
-            return jsonTool.Deserialize<T>(value);
-        }
+    //    public override T Deserialize<T>(string value)
+    //    {
+    //        Type realType = typeof(T);
+    //        if (realType == typeof(Component))
+    //        {
+    //            return (T)(object)components[jsonTool.Deserialize<int>(value)];
+    //        }
+    //        else if (realType == typeof(GameObject))
+    //        {
+    //            return (T)(object)gos[jsonTool.Deserialize<int>(value)];
+    //        }
 
-        public override bool IsTypeSupport(Type type)
-        {
-            return true;
-        }
+    //        return jsonTool.Deserialize<T>(value);
+    //    }
 
-        public override string Serialize(object value)
-        {
-            object realValue = value;
+    //    public override bool IsTypeSupport(Type type)
+    //    {
+    //        return true;
+    //    }
 
-            if (value.GetType().IsSubclassOf(typeof(BaseAopMonoBehaviour)))
-            {
-                realValue = new AopMonoBehaviourID(((BaseAopMonoBehaviour)value).UUID, components.FindIndex(p => p == value as Component).ToString(), value.GetType().FullName);
-            }
-            else if (value.GetType().IsSubclassOf(typeof(BaseAopClass)))
-            {
-                realValue = new AopClassID(((BaseAopClass)value).UUID, value.GetType().FullName);
-            }
+    //    public override string Serialize(object value)
+    //    {
+    //        object realValue = value;
 
-            //if (value is Component)
-            //{
-            //    //RefreshCom();
-            //    realValue = (ComponentID)components.FindIndex(p => p == value as Component);
-            //}
-            //else if (value is GameObject)
-            //{
-            //    //RefreshGo();
-            //    realValue = (GameObjectID)gos.FindIndex(p => p == value as GameObject);
-            //}
-            return jsonTool.Serialize(realValue);
-        }
+    //        //if (value.GetType().IsSubclassOf(typeof(MonoBehaviour)))
+    //        //{
+    //        //    realValue = new AopMonoBehaviourID(((MonoBehaviour)value).UUID, components.FindIndex(p => p == value as Component).ToString(), value.GetType().FullName);
+    //        //}
+    //        //else if (value.GetType().IsSubclassOf(typeof(BaseAopClass)))
+    //        //{
+    //        //    realValue = new AopClassID(((BaseAopClass)value).UUID, value.GetType().FullName);
+    //        //}
 
-        struct AopMonoBehaviourID
-        {
-            public string id;
-            public string monoId;
-            public string typeName;
+    //        //if (value is Component)
+    //        //{
+    //        //    //RefreshCom();
+    //        //    realValue = (ComponentID)components.FindIndex(p => p == value as Component);
+    //        //}
+    //        //else if (value is GameObject)
+    //        //{
+    //        //    //RefreshGo();
+    //        //    realValue = (GameObjectID)gos.FindIndex(p => p == value as GameObject);
+    //        //}
+    //        return jsonTool.Serialize(realValue);
+    //    }
 
-            public AopMonoBehaviourID(string id, string monoId, string typeName)
-            {
-                this.id = id;
-                this.monoId = monoId;
-                this.typeName = typeName;
-            }
-        }
+    //    private struct AopMonoBehaviourID
+    //    {
+    //        public string id;
+    //        public string monoId;
+    //        public string typeName;
 
-        struct AopClassID
-        {
-            public string id;
-            public string typeName;
+    //        public AopMonoBehaviourID(string id, string monoId, string typeName)
+    //        {
+    //            this.id = id;
+    //            this.monoId = monoId;
+    //            this.typeName = typeName;
+    //        }
+    //    }
 
-            public AopClassID(string id, string typeName)
-            {
-                this.id = id;
-                this.typeName = typeName;
-            }
-        }
+    //    private struct AopClassID
+    //    {
+    //        public string id;
+    //        public string typeName;
 
-        struct ComponentID
-        {
-            public int id;
-            public static implicit operator int(ComponentID id)
-            {
-                return id.id;
-            }
-            public static implicit operator ComponentID(int i)
-            {
-                return new ComponentID() { id = i };
-            }
-        }
+    //        public AopClassID(string id, string typeName)
+    //        {
+    //            this.id = id;
+    //            this.typeName = typeName;
+    //        }
+    //    }
 
-        struct GameObjectID
-        {
-            public int id;
-            public static implicit operator int(GameObjectID id)
-            {
-                return id.id;
-            }
-            public static implicit operator GameObjectID(int i)
-            {
-                return new GameObjectID() { id = i };
-            }
-        }
-    }
+    //    private struct ComponentID
+    //    {
+    //        public int id;
 
+    //        public static implicit operator int(ComponentID id)
+    //        {
+    //            return id.id;
+    //        }
+
+    //        public static implicit operator ComponentID(int i)
+    //        {
+    //            return new ComponentID() { id = i };
+    //        }
+    //    }
+
+    //    private struct GameObjectID
+    //    {
+    //        public int id;
+
+    //        public static implicit operator int(GameObjectID id)
+    //        {
+    //            return id.id;
+    //        }
+
+    //        public static implicit operator GameObjectID(int i)
+    //        {
+    //            return new GameObjectID() { id = i };
+    //        }
+    //    }
+    //}
 }

@@ -1,7 +1,6 @@
-﻿
-using System.IO;
+﻿using System.IO;
 
-namespace Replay
+namespace MyUnitySDK.IO
 {
     /// <summary>
     /// IO接口
@@ -16,7 +15,7 @@ namespace Replay
     /// <summary>
     /// IO工具
     /// </summary>
-    public class RIO
+    public class IO
     {
         /// <summary>
         /// 默认为普通text
@@ -43,21 +42,22 @@ namespace Replay
         {
             return ioTool.Read(config);
         }
-
     }
-
 }
 
-namespace Replay
+namespace MyUnitySDK.IO
 {
-    
     /// <summary>
     /// 本地IO工具
     /// </summary>
     public class FileStreamIOTool : AbsIO
     {
-        
         public string path;
+
+        /// <summary>
+        /// 本地io生成文件的位置
+        /// </summary>
+        /// <param name="path"></param>
         public FileStreamIOTool(string path)
         {
             this.path = path;
@@ -75,10 +75,8 @@ namespace Replay
         public override void Write(string config, byte[] contents)
         {
             FileStream stream = new FileStream(path + "/" + config, FileMode.Create);
-            stream.Write(contents,0, contents.Length);
+            stream.Write(contents, 0, contents.Length);
             stream.Close();
-        
         }
     }
-
 }

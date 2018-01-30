@@ -1,6 +1,4 @@
-﻿
-
-//includes for Unity
+﻿//includes for Unity
 using UnityEngine;
 
 //includes for System
@@ -12,37 +10,25 @@ using UnityEngine.UI;
 /// </summary>
 namespace Replay
 {
-
-	/// <summary>
+    /// <summary>
     /// 类 名 称：Replay.ApplicationMono
-	/// 类 功 能：
-	/// 主要接口：
+    /// 类 功 能：
+    /// 主要接口：
     /// </summary>
-	public class ApplicationMono : MonoBehaviour 
-	{
-
-
+    public class ApplicationMono : MonoBehaviour
+    {
         public Button loadBtn;
         public Button saveBtn;
         public Button playBtn;
-		/// <summary>
-		///
-		/// </summary>
-		void Start () 
-		{
 
+        /// <summary>
+        ///
+        /// </summary>
+        private void Start()
+        {
             saveBtn.gameObject.SetClick((p) => ReplayManager.Instance.SaveReplayData());
-            loadBtn.gameObject.SetClick((p)=>ReplayManager.Instance.LoadReplayData());
+            loadBtn.gameObject.SetClick((p) => ReplayManager.Instance.LoadReplayData());
             playBtn.gameObject.SetClick((p) => ReplayManager.Instance.Replay = true);
-		}
-	
-		/// <summary>
-		///
-		/// </summary>
-		void Update ()
-		{
-	
-		}
-	}
+        }
+    }
 }
-
